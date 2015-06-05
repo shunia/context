@@ -9,13 +9,22 @@ package me.shunia.context
 	{
 		public function ContextualStage()
 		{
-			addEventListener(Event.ADDED_TO_STAGE, onAdded);
+			addEventListener(Event.ADDED_TO_STAGE, _preCheckAdded);
 		}
 		
-		private function onAdded(event:Event):void
+		private function _preCheckAdded(event:Event):void
 		{
+			removeEventListener(Event.ADDED_TO_STAGE, _preCheckAdded);
+			addEventListener(Event.ENTER_FRAME, _preCheckEnterFrame);
+		}
+		
+		private function _preCheckEnterFrame(e:Event):void {
+			removeEventListener(Event.ENTER_FRAME, _preCheckEnterFrame);
+			preInit();
+		}
+		
+		protected function preInit():void {
 			_("stage", stage);
-			removeEventListener(Event.ADDED_TO_STAGE, onAdded);
 			
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
