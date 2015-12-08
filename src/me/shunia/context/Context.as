@@ -27,7 +27,7 @@ package me.shunia.context
 		 * @param name
 		 * @param context	IContextItem实例
 		 */		
-		public static function injectContext(name:String, context:IContextPlugin):void {
+		public static function inject(name:String, context:IContextPlugin):void {
 			_contexts[name] = {"name":name, "context":context, "default":null, "param":null, "inited":true};
 		}
 		
@@ -38,7 +38,7 @@ package me.shunia.context
 		 * @param name 定义的上下文类的名称.
 		 * @param context 上下文的实际定义,可以是类(Class)或者实例(Instance).
 		 */		
-		public static function regContext(name:String, context:*, defaultContext:* = null, param:* = null):void {
+		public static function register(name:String, context:*, defaultContext:* = null, param:* = null):void {
 			var c:Object = _registerd.hasOwnProperty(name) ? _registerd[name] : null;
 			if (!c) {
 				c = {"name":name};
@@ -65,7 +65,7 @@ package me.shunia.context
 		 *  
 		 * @param name
 		 */		
-		public static function hasContext(name:String):Boolean {
+		public static function has(name:String):Boolean {
 			return _contexts.hasOwnProperty(name) && _contexts[name]// && (_contextDict[name]["context"] || _contextDict[name]["default"]);
 		}
 		
@@ -75,17 +75,17 @@ package me.shunia.context
 		 * @param name 定义的上下文类的名称.
 		 * @return 上下文类的实例.
 		 */		
-		public static function getContext(name:String):* {
-			if (hasContext(name)) {		// 已初始化
+		public static function g(name:String):* {
+			if (has(name)) {		// 已初始化
 				if (_contexts[name]["inited"]) {
 					return _contexts[name]["context"];
 				} else {
 					initContext(_contexts[name]);
-					return getContext(name);
+					return g(name);
 				}
 			} else if (_registerd.hasOwnProperty(name) && _registerd[name]) {		// 已注册
 				initRegisterdContext(name);
-				return getContext(name);
+				return g(name);
 			}
 			return null;
 		}

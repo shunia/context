@@ -1,4 +1,4 @@
 context
 =======
 
-Simple and easy IOC framework for actionscript3. 
+Simple and easy Object-Based framework for actionscript3. 

@@ -24,7 +24,7 @@ package
 			// 没有setValue,说明是获取Context中的属性或者context
 			var query:* = Context[selector];		// 优先检查是不是调用的Context上的公共属性
 			if (query != null) return query;
-			query = Context.getContext(selector);	// 再次检查是不是调用的IContextItem
+			query = Context.g(selector);	// 再次检查是不是调用的IContextItem
 			if (query != null) return query;
 			if (Context.variables.hasOwnProperty(selector)) {
 				query = Context.variables[selector];	// 最后检查是不是查找的variables中的全局变量
@@ -34,7 +34,7 @@ package
 			// 如果是IContextItem实例				-- TODO: 可能虽然是实例,但是目的只是单纯的设置属性
 			var injectContext:Function = function ():Boolean {
 				if (setValue is IContextPlugin) {
-					Context.injectContext(selector, setValue);
+					Context.inject(selector, setValue);
 					return true;
 				} else {
 					return false;
@@ -49,14 +49,14 @@ package
 					var lists:XMLList = type.factory.implementsInterface;
 					if (lists && lists.length() > 0) {
 						for each (var xml:XML in lists) {
-							if (xml.@type.indexOf("IContextItem") > -1) {
+							if (xml.@type.indexOf("IContextPlugin") > -1) {
 								found = true;
 								break;
 							}
 						}
 					}
 					if (found) {
-						Context.regContext(selector, setValue, null, params);
+						Context.register(selector, setValue, null, params);
 						return true;
 					} else {
 						return false;
