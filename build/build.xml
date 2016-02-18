@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<project name="context" default="build.context" basedir="../">
+    <dirname property="current.context" file="${ant.file.context}"/>
+    <dirname property="sources.context" file="${current.context}/../"/>
+    
+    <echo message="[context] Compiling: "/>
+    <echo message="[context] Project root: ${sources.context}"/>
+
+    <!-- setup FLEX_HOME -->
+    <import file="${current.context}/flex-home.xml"/>
+
+    <!-- setup build environment-->
+    <property name="deploy.dir.context" value="${sources.context}/bin"/>
+    <property name="deploy.name.context" value="context.swc"/>
+
+    <!-- setup dependencies - nothing here -->
+
+    <!-- setup other properties -->
+    <property name="output.context" value="${deploy.dir.context}"/>
+
+    <!-- default task -->
+    <target name="build.context" depends="clean.context, compile.context"/>
+
+    <!-- task clean -->
+    <target name="clean.context">
+        <delete dir="${deploy.dir.context}"/>
+        <mkdir dir="${deploy.dir.context}"/>
+    </target>
+
+    <!-- task compile -->
+    <target name="compile.context">
+        <compc output="${deploy.dir.context}/${deploy.name.context}" failonerror="true" maxmemory="1024m">
+            <include-sources dir="${sources.context}/src" includes="*"/>
+        </compc>
+        <echo message="[context] Output file: ${deploy.dir.context}/${deploy.name.context}"/>
+    </target>
+</project>
